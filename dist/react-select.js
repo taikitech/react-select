@@ -4,10 +4,10 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _ = (typeof window !== "undefined" ? window._ : typeof global !== "undefined" ? global._ : null),
-    React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null),
-    Input = (typeof window !== "undefined" ? window.AutosizeInput : typeof global !== "undefined" ? global.AutosizeInput : null),
-    classes = (typeof window !== "undefined" ? window.classNames : typeof global !== "undefined" ? global.classNames : null),
+var _ = (typeof window !== "undefined" ? window['_'] : typeof global !== "undefined" ? global['_'] : null),
+    React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null),
+    Input = (typeof window !== "undefined" ? window['AutosizeInput'] : typeof global !== "undefined" ? global['AutosizeInput'] : null),
+    classes = (typeof window !== "undefined" ? window['classNames'] : typeof global !== "undefined" ? global['classNames'] : null),
     Value = require('./Value');
 
 var requestId = 0;
@@ -181,9 +181,8 @@ var Select = React.createClass({
 	clickedOutsideElement: function clickedOutsideElement(element, event) {
 		var eventTarget = event.target ? event.target : event.srcElement;
 		while (eventTarget != null) {
-			if (eventTarget === element) {
-				return false;
-			}eventTarget = eventTarget.offsetParent;
+			if (eventTarget === element) return false;
+			eventTarget = eventTarget.offsetParent;
 		}
 		return true;
 	},
@@ -320,7 +319,8 @@ var Select = React.createClass({
 		this._blurTimeout = setTimeout((function () {
 			if (this._focusAfterUpdate) return;
 			this.setState({
-				isFocused: false
+				isFocused: false,
+				isOpen: false
 			});
 		}).bind(this), 50);
 
@@ -330,9 +330,9 @@ var Select = React.createClass({
 	},
 
 	handleKeyDown: function handleKeyDown(event) {
-		if (this.state.disabled) {
-			return;
-		}switch (event.keyCode) {
+		if (this.state.disabled) return;
+
+		switch (event.keyCode) {
 
 			case 8:
 				// backspace
@@ -459,11 +459,9 @@ var Select = React.createClass({
 			return this.props.filterOptions.call(this, options, filterValue, exclude);
 		} else {
 			var filterOption = function filterOption(op) {
-				if (this.props.multi && _.contains(exclude, op.value)) {
-					return false;
-				}if (this.props.filterOption) {
-					return this.props.filterOption.call(this, op, filterValue);
-				}var valueTest = String(op.value),
+				if (this.props.multi && _.contains(exclude, op.value)) return false;
+				if (this.props.filterOption) return this.props.filterOption.call(this, op, filterValue);
+				var valueTest = String(op.value),
 				    labelTest = String(op.label);
 				return !filterValue || this.props.matchPos === 'start' ? this.props.matchProp !== 'label' && valueTest.toLowerCase().substr(0, filterValue.length) === filterValue || this.props.matchProp !== 'value' && labelTest.toLowerCase().substr(0, filterValue.length) === filterValue : this.props.matchProp !== 'label' && valueTest.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0 || this.props.matchProp !== 'value' && labelTest.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0;
 			};
@@ -686,7 +684,7 @@ module.exports = Select;
 (function (global){
 'use strict';
 
-var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
 var Option = React.createClass({
 
